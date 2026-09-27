@@ -1,0 +1,29 @@
+{
+  "database_name": "Nicole Astronomy Database",
+  "database_version": "0.1.0",
+  "schema_version": 1,
+  "source": {
+    "app": "Nicole the Astronavigator",
+    "version": "1.12.0",
+    "file": "index.html"
+  },
+  "id_policy": "Existing Nicole 1 IDs are preserved as stable IDs. New shared entities must receive immutable IDs.",
+  "counts": {
+    "constellations": 88,
+    "stars_total": 64,
+    "stars_with_full_explanation": 22,
+    "planets": 7,
+    "deep_sky": 47,
+    "asterisms": 8,
+    "catalog_entries": 214
+  },
+  "checksums_sha256": {
+    "data/asterisms.json": "34d63ef262193d89a31d28c1ee399f4d1c8663d6f1bc13726be6a1cb15372c98",
+    "data/catalog.json": "74bb2683cd1e136313f9e0e91760ffbdfe9e9b9e761b1fa1d02ad2e1843811ee",
+    "data/constellations.json": "06f1050195611b6e7684bde8c5307ea5b54c03707a81d62b5c0eb0952926781b",
+    "data/deep-sky.json": "d9fa3c0e765df8e28399bfca75f178f1734e048ebf3528cb3adad44887a7e51a",
+    "data/external-sources.json": "9d547fedb4b5df06296c95f0064096565bd2028c0934fbb3a9f949462fc9c5aa",
+    "data/planets.json": "747cd1ecb5480c3800bde3fba1597f827a22ab3d61c19e5f905b3b06e30cda4f",
+    "data/stars.json": "8b214378bea8a97aba064a4b0df1e2e3b140537cd1e6c1db0455729ab1a9bf94"
+  }
+}

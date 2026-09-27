@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nicole.local/schema/object.schema.json",
+  "title": "Nicole Astronomy Object",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "type",
+    "source"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "type": "object",
+      "required": [
+        "ja"
+      ],
+      "properties": {
+        "ja": {
+          "type": "string"
+        },
+        "en": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "type": {
+      "type": "string"
+    },
+    "position": {
+      "type": "object"
+    },
+    "magnitude_v": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "constellation_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "explanation": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "source": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}
