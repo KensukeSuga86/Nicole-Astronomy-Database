@@ -1,5 +1,7 @@
 {
-  "database": "Nicole Astronomy Database",
-  "latest": "0.1.2",
-  "manifest": "versions/0.1.2/manifest.json"
+  "version": "0.2.0",
+  "path": "versions/0.2.0/",
+  "manifest": "versions/0.2.0/manifest.json",
+  "previous": "0.1.2",
+  "updated": "2026-09-28"
 }

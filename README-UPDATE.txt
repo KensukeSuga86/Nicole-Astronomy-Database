@@ -1,1 +1,4 @@
-Upload versions/0.1.2/ as a new folder, then replace root latest.json and README.md. Keep versions/0.1.0 and versions/0.1.1.
+Nicole Astronomy Database v0.2.0 GitHub update
+
+Upload ALL contents of this archive to the repository root.
+Keep existing older versions directories. This package adds versions/0.2.0 and updates latest.json.
