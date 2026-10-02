@@ -1,5 +1,11 @@
 const KEY="nicole0_description_overrides_v1";
 const $=q=>document.querySelector(q), esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function updateNetworkStatus(){const el=$('#networkStatus');if(!el)return;const on=navigator.onLine;el.textContent=on?'ONLINE':'OFFLINE';el.style.borderColor=on?'#36546d':'#8a6840';el.style.color=on?'#abd8f1':'#ffd06b'}
+window.addEventListener('online',updateNetworkStatus);window.addEventListener('offline',updateNetworkStatus);updateNetworkStatus();
+function isStandalone(){return window.matchMedia?.('(display-mode: standalone)').matches||navigator.standalone===true}
+function updateStorageNote(){const el=$('#storageNote');if(!el)return;el.textContent=isStandalone()?'Webアプリとして起動中です。編集内容はSafariとは共有されません。Nicole 2へ渡すときは「編集差分を書き出し」を使用してください。':'編集内容はSafariのローカル保存領域へ保持されます。同一オリジンをSafariで開くNicole 2は再読込時にこの差分を参照できます。'}
+updateStorageNote();
+
 const defs={
  constellation:{file:"constellations.json",label:"星座",fields:[
   ["legacy_story","従来の概要","full"],["explanation.science","天文学",""],["explanation.myth","神話・由来",""]]},

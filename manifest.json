@@ -1,6 +1,6 @@
 {
   "database_name": "Nicole Astronomy Database",
-  "database_version": "0.3.2",
+  "database_version": "0.3.3",
   "schema_version": 5,
   "source": {
     "base_app": "Nicole the Astronavigator",
@@ -18,7 +18,8 @@
       "mythology provenance separation",
       "Miyazawa Kenji cultural-context tagging",
       "Nicole the Astrorium v0.7.6 completed 88-constellation standard lines and artwork",
-      "browser-based description editor for common Nicole explanations"
+      "browser-based description editor for common Nicole explanations",
+      "installable PWA shell for the browser-based common-description editor"
     ],
     "constellation_standard_project": {
       "schema": "nicole-astrorium-constellation-project-v1",
@@ -87,8 +88,13 @@
     "schema/constellation.schema.json": "6bad0249449a25670d4460f4e69fc7ae8748e69a0fb988cace2f81dfd3746052",
     "schema/object.schema.json": "8deed814b54e6410d97b66f6e23631d7a4aa175b0075b153e6cef82d3972e83e",
     "provenance/constellation-project-hotfix-v0.3.1.json": "f8a451a6a15d6e954f1171dbfeee840f40de06c134e5cbb4c1a37617dd2465b9",
-    "description-editor.html": "731307e9d09d1d064558e69d6fb6f65d5b5955f72788d6ca1369f4cbf0df7780",
-    "description-editor.js": "3156dd2332515d06aa7308637c148b596a140d99955cc4d8052d9814ee16df41"
+    "description-editor.html": "0640a2aac1650ca35777c62f9ee4353f9d640c0bf13d265809616da387153588",
+    "description-editor.js": "ef0836489d7127487e4f45f9acdf6683fc00a83df7bfd84d0a7caf4ee9c13f22",
+    "editor.webmanifest": "df244382468119e4c91f9b8010b09ae30ea5298974dad156f93849a82ee6c05a",
+    "editor-sw.js": "f51d6523fbcb764f87699d0c570853f7aa47b219ef255523eb0d2348f2b996a4",
+    "assets/editor/icon-192.png": "eae4cd44ecc46814bd27d00d122096c9e977bc90c5a226d8edf24b7e73c286be",
+    "assets/editor/icon-512.png": "29f3429aa032b77d867784385c9b315721debf5b46763d52c2501bc641f149d8",
+    "assets/editor/apple-touch-icon.png": "bc88feb7653c80913f580839f05a5afbd0c63b6b0f5d55d12cd94bec490dd035"
   },
   "constellation_art_manifest": "data/constellation-art-manifest.json"
 }

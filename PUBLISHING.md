@@ -1,9 +1,9 @@
 # GitHub Pages 公開手順
 
-1. GitHubで `Nicole-Astronomy-Database` リポジトリを作成します。
-2. このZIPを展開し、中身の `README.md`, `latest.json`, `versions/` をリポジトリのルートへアップロードします。
-3. Settings > Pages > Deploy from a branch を選択します。
-4. Branch: `main`, Folder: `/ (root)` で保存します。
-5. 発行されたPages URLをChatGPTへ送ってください。
+1. この更新ZIPの中身を `Nicole-Astronomy-Database` リポジトリのルートへアップロードします。
+2. 既存の `versions/0.3.2/` は削除しません。
+3. `versions/0.3.3/` とルートの最新版ファイル、`latest.json` を反映します。
+4. GitHub Pages は `main` / `/ (root)` を維持します。
+5. 解説エディタPWAは `description-editor.html` から起動します。
 
-Nicole 2 の接続先は、例として `https://<user>.github.io/Nicole-Astronomy-Database/versions/0.1.0/` になります。
+Service Workerは解説エディタのアプリシェルだけをキャッシュし、Nicole 0の `manifest.json` / `data/*.json` はキャッシュしません。
