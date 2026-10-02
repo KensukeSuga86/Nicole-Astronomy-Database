@@ -1,14 +1,4 @@
-# Nicole Astronomy Database v0.3.3
-
-## v0.3.3 — 解説エディタPWA対応
-
-- `description-editor.html` をホーム画面 / Dock から独立起動できるPWAとして整備。
-- `editor.webmanifest` / `editor-sw.js` / `assets/editor/` のPWAアイコンを追加。
-- Service Workerの対象は解説エディタのアプリシェルだけに限定し、共通DBの `manifest.json` / `data/*.json` はキャッシュしない。
-- DB読込は従来どおり `cache: no-store` を維持し、公開中のNicole 0を正本として参照する。
-- オンライン / オフライン状態をエディタ上部に表示。
-- WebKitの仕様に合わせ、ホーム画面 / DockのWebアプリはSafariとローカルストレージを共有しないことをUI上で明示。PWAからNicole 2へ編集を渡す場合は差分JSONを書き出して利用する。
-- 天文データ本体、ID、スキーマ、`nicole0_description_overrides_v1` はv0.3.2から変更なし。
+# Nicole Astronomy Database v0.3.2
 
 ## v0.3.2 — 共通解説エディタ
 
