@@ -1,7 +1,7 @@
 {
-  "version": "0.3.0",
-  "path": "versions/0.3.0/",
-  "manifest": "versions/0.3.0/manifest.json",
-  "previous": "0.2.0",
+  "version": "0.3.1",
+  "path": "versions/0.3.1/",
+  "manifest": "versions/0.3.1/manifest.json",
+  "previous": "0.3.0",
   "updated": "2026-10-02"
 }
