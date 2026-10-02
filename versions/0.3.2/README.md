@@ -1,4 +1,12 @@
-# Nicole Astronomy Database v0.3.1
+# Nicole Astronomy Database v0.3.2
+
+## v0.3.2 — 共通解説エディタ
+
+- Nicole 0（Nicole Astronomy Database）に `description-editor.html` / `description-editor.js` を追加。
+- 星座・恒星・深宇宙天体・惑星の解説をブラウザ上で編集できる。
+- 編集内容は `nicole0_description_overrides_v1` としてブラウザのローカル保存領域に保持し、差分JSONとして書き出し・読み込みできる。
+- 編集済みのカテゴリJSONも書き出し可能。
+- 天文データ本体はv0.3.1と同一で、Aqr星座線ホットフィックスをそのまま維持。
 
 ## v0.3.1 — 星座線ホットフィックス
 

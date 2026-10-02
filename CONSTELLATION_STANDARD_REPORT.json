@@ -1,6 +1,6 @@
 {
   "summary": {
-    "database_version": "0.3.1",
+    "database_version": "0.3.2",
     "project_schema": "nicole-astrorium-constellation-project-v1",
     "project_schema_version": 6,
     "project_app_version": "0.7.6",
