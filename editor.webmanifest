@@ -1,7 +1,7 @@
 {
-  "name": "Nicole 0 — Astronomy Database Editor",
-  "short_name": "Nicole 0 Editor",
-  "description": "Nicole Astronomy Database の共通解説を編集するためのPWA",
+  "name": "Nicole Astronomy Database Editor",
+  "short_name": "Astronomy DB Editor",
+  "description": "Nicole Astronomy Database の共通解説を編集し、正式DB更新パッケージを書き出すためのPWA",
   "id": "./description-editor.html",
   "start_url": "./description-editor.html",
   "scope": "./",
