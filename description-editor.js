@@ -367,9 +367,25 @@ async function boot(){
   $('#autoSave').checked=!!prefs.autoSave;
   $('#editFilter').value=prefs.editFilter||'all';
   $('#sortMode').value=prefs.sortMode||'source';
+
+  const params=new URLSearchParams(location.search);
+  const requestedKind=params.get('kind');
+  const requestedId=params.get('id');
+  if(requestedKind&&defs[requestedKind]){
+    currentKind=requestedKind;
+    $('#kind').value=currentKind;
+  }
+
   renderList();
-  selectItem(db[currentKind][0]?.id);
-  $('#status').textContent='準備完了';
+
+  const requestedItem=requestedId?sourceItem(currentKind,requestedId):null;
+  if(requestedItem){
+    selectItem(requestedItem.id);
+    $('#status').textContent='指定された天体を開きました';
+  }else{
+    selectItem(db[currentKind][0]?.id);
+    $('#status').textContent=requestedId?'指定されたIDが見つからないため一覧先頭を開きました':'準備完了';
+  }
 }
 
 $('#kind').onchange=e=>navigateWithGuard(()=>{
