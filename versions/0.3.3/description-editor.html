@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Nicole 0 解説エディタ</title>
+<title>Nicole Astronomy Database Editor</title>
 <meta name="theme-color" content="#091522">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Nicole 0 Editor">
+<meta name="apple-mobile-web-app-title" content="Astronomy DB Editor">
 <link rel="manifest" href="./editor.webmanifest">
 <link rel="apple-touch-icon" href="./assets/editor/apple-touch-icon.png">
 <style>
@@ -46,7 +46,7 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
 </head>
 <body>
 <header>
-  <b>Nicole 0 — Astronomy Database Editor</b>
+  <b>Nicole Astronomy Database Editor</b>
   <span class="badge" id="dbVersion">DB</span>
   <span class="badge" id="networkStatus">ONLINE</span>
   <span class="badge" id="editedBadge">編集 0</span>
@@ -54,10 +54,10 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
   <div class="header-actions">
     <button class="navbtn active" data-page="editor">編集</button>
     <button class="navbtn" data-page="help">使い方</button>
-    <button id="exportPatch">編集差分を書き出し</button>
-    <button id="importPatch">差分を読み込み</button>
+    <button id="exportPatch">編集バックアップを書き出し</button>
+    <button id="importPatch">編集バックアップを読み込み</button>
     <input id="importFile" type="file" accept="application/json,.json" hidden>
-    <button id="resetAll" class="danger">全編集を消去</button>
+    <button id="exportReleasePackage" class="primary">正式DB更新パッケージを書き出す</button><button id="resetAll" class="danger">全編集を消去</button>
   </div>
 </header>
 
@@ -108,7 +108,7 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
         <button id="nextItem">次へ →</button>
         <button id="save" class="primary">この解説を保存</button>
         <button id="resetItem">この天体だけ初期値へ戻す</button>
-        <button id="downloadData" class="push">この種類の編集済みJSONを書き出す</button>
+        <button id="downloadData" class="push">確認用JSONを書き出す</button>
       </div>
 
       <div class="status" id="status">データを読み込み中…</div>
@@ -121,7 +121,7 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
 
       <section class="preview-card">
         <h3>プレビュー</h3>
-        <div class="muted">Nicole 2の完全な画面再現ではなく、Nicole 0に保存される解説文の読みやすさを確認するためのプレビューです。</div>
+        <div class="muted">Nicole the Astrorium の完全な画面再現ではなく、Nicole Astronomy Database に保存される解説文の読みやすさを確認するためのプレビューです。</div>
         <div id="preview"></div>
       </section>
     </main>
@@ -130,8 +130,8 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
 
 <section id="helpPage" class="page">
   <div class="help-hero">
-    <h1>Nicole 0 Editor — 使い方</h1>
-    <p class="muted">Nicole Astronomy Database の共通解説を、安全に編集・バックアップ・Nicole 2へ反映するための操作ガイドです。</p>
+    <h1>Nicole Astronomy Database Editor — 使い方</h1>
+    <p class="muted">Nicole Astronomy Database の共通解説を、安全に編集・バックアップ・正式DBへ反映するための操作ガイドです。</p>
   </div>
   <div class="help-grid">
     <article class="help-card">
@@ -158,27 +158,27 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
     <article class="help-card">
       <h2>3. 保存場所</h2>
       <p>通常のSafariで開いた場合、編集差分はブラウザの <code>localStorage</code> に保存されます。</p>
-      <div class="help-note">Nicole 0の元JSONそのものを書き換えるのではなく、差分だけを別保存します。そのため「この天体だけ初期値へ戻す」や「全編集を消去」で元のDB内容へ戻せます。</div>
+      <div class="help-note">Nicole Astronomy Database の元JSONそのものを書き換えるのではなく、編集差分だけを別保存します。そのため「この天体だけ初期値へ戻す」や「全編集を消去」で元のDB内容へ戻せます。</div>
     </article>
 
     <article class="help-card">
       <h2>4. iPhone / iPadでWebアプリとして使う場合</h2>
       <p>ホーム画面へ追加したWebアプリは、Safari本体とは別の保存領域として扱われる場合があります。</p>
-      <div class="help-note help-warn">Nicole 2へ確実に渡したい場合は「編集差分を書き出し」でJSONを保存し、必要な環境で「差分を読み込み」を使ってください。</div>
+      <div class="help-note help-warn">端末間で編集内容を移す場合は「編集バックアップを書き出し」でJSONを保存し、必要な環境で「編集バックアップを読み込み」を使ってください。</div>
     </article>
 
     <article class="help-card">
       <h2>5. バックアップ</h2>
       <ul>
-        <li><b>編集差分を書き出し</b>：変更した天体だけをまとめた小さなJSON。</li>
-        <li><b>この種類の編集済みJSONを書き出す</b>：選択中の種類について、差分を反映した完成JSON。</li>
+        <li><b>編集バックアップを書き出し</b>：変更した天体だけをまとめた作業用JSON。</li>
+        <li><b>確認用JSONを書き出す</b>：選択中の種類について、編集差分を反映した確認用JSON。</li><li><b>正式DB更新パッケージを書き出す</b>：GitHub上の正本へ反映するための正式な更新パッケージ。</li>
       </ul>
-      <p>長時間編集する前後には「編集差分を書き出し」でバックアップしておくのがおすすめです。</p>
+      <p>長時間編集する前後には「編集バックアップを書き出し」でバックアップしてください。正式反映時は「正式DB更新パッケージを書き出す」を使用します。</p>
     </article>
 
     <article class="help-card">
-      <h2>6. 差分JSONを読み込む</h2>
-      <p>「差分を読み込み」から、以前書き出したNicole 0 Editorの差分JSONを選択します。読み込むと現在のローカル編集内容が、その差分JSONの内容へ置き換わります。</p>
+      <h2>6. 編集バックアップを読み込む</h2>
+      <p>「編集バックアップを読み込み」から、以前書き出した編集バックアップJSONを選択します。読み込むと現在のローカル編集内容が、そのJSONの内容へ置き換わります。</p>
     </article>
 
     <article class="help-card">
@@ -187,27 +187,33 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
         <li><b>この天体だけ初期値へ戻す</b>：選択中の天体だけ編集を破棄。</li>
         <li><b>全編集を消去</b>：Nicole 0 Editorに保存したすべての差分を消去。</li>
       </ul>
-      <div class="help-note help-warn">「全編集を消去」は元に戻せません。必要なら先に差分JSONを書き出してください。</div>
+      <div class="help-note help-warn">「全編集を消去」は元に戻せません。必要なら先に編集バックアップを書き出してください。</div>
     </article>
 
     <article class="help-card">
       <h2>8. オフライン利用</h2>
-      <p>Editor本体はPWAとしてキャッシュされます。ただしNicole 0のDB JSONは常に最新版を参照する設計なので、最初の読み込みやDB更新確認にはオンライン接続が必要です。</p>
+      <p>Editor本体はPWAとしてキャッシュされます。ただしNicole Astronomy Database のJSONは常に正本を参照する設計なので、最初の読み込みやDB更新確認にはオンライン接続が必要です。</p>
     </article>
 
     <article class="help-card full">
-      <h2>9. Nicole 2との関係</h2>
-      <p>Nicole 0は共通データベースです。このEditorで保存するのは「Nicole 0の解説差分」で、Nicole 2側が同じ差分を参照できる構成であれば、Nicole 2を再読み込みした際に反映できます。</p>
-      <p>Webアプリとして独立起動している場合など、保存領域が別れている環境では自動共有されないため、差分JSONの書き出し・読み込みを使って受け渡します。</p>
+      <h2>9. Nicole the Astrorium との関係</h2>
+      <p>Nicole Astronomy Database が共通データベースの正本です。解説文の編集経路はこのEditorに一本化し、Nicole the Astrorium 側では共通解説を編集しません。</p>
+      <p>Editorでのローカル編集は他アプリへ直接配布せず、正式DB更新パッケージをGitHub上の正本へ反映した後、各アプリが正式DBを取り込みます。</p>
     </article>
 
     <article class="help-card full">
-      <h2>10. 困ったとき</h2>
+      <h2>10. 正式DB更新パッケージ</h2>
+      <p>「正式DB更新パッケージを書き出す」は、保存済みの解説編集を正本へ反映するための唯一の正式な書き出し経路です。パッケージには変更対象、変更後のカテゴリJSON、SHA-256、元DB version、提案する次versionが含まれます。</p>
+      <div class="help-note">パッケージを書き出しただけでは正本は変更されません。内容を確認したうえでGitHub上の Nicole Astronomy Database へ反映し、そこで初めて正式DB更新になります。</div>
+    </article>
+
+    <article class="help-card full">
+      <h2>11. 困ったとき</h2>
       <ul>
         <li>一覧が出ない → ネットワーク状態とDB読み込みエラー表示を確認。</li>
-        <li>編集したのに反映されない → 「保存済み」になっているか確認し、Nicole 2側を再読み込み。</li>
-        <li>iPhoneのWebアプリとSafariで内容が違う → 保存領域が別れている可能性があるため、差分JSONで移行。</li>
-        <li>編集内容を保険として残したい → 「編集差分を書き出し」で定期的にバックアップ。</li>
+        <li>編集したのに正式DBへ反映されない → 「正式DB更新パッケージ」を作成しただけでは正本は変わりません。GitHub上で正式反映してください。</li>
+        <li>iPhoneのWebアプリとSafariで内容が違う → 保存領域が別れている可能性があるため、編集バックアップJSONで移行。</li>
+        <li>編集内容を保険として残したい → 「編集バックアップを書き出し」で定期的にバックアップ。</li>
       </ul>
     </article>
   </div>
