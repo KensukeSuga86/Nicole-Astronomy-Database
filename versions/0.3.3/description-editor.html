@@ -185,7 +185,7 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
       <h2>7. 初期値へ戻す</h2>
       <ul>
         <li><b>この天体だけ初期値へ戻す</b>：選択中の天体だけ編集を破棄。</li>
-        <li><b>全編集を消去</b>：Nicole 0 Editorに保存したすべての差分を消去。</li>
+        <li><b>全編集を消去</b>：Nicole Astronomy Database Editor に保存したすべての差分を消去。</li>
       </ul>
       <div class="help-note help-warn">「全編集を消去」は元に戻せません。必要なら先に編集バックアップを書き出してください。</div>
     </article>
@@ -222,7 +222,7 @@ aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}
 <script type="module" src="./description-editor.js"></script>
 <script>
 if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>navigator.serviceWorker.register('./editor-sw.js').then(r=>r.update()).catch(e=>console.warn('Nicole 0 Editor SW registration failed',e)))
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./editor-sw.js').then(r=>r.update()).catch(e=>console.warn('Nicole Astronomy Database Editor SW registration failed',e)))
 }
 </script>
 </body>
