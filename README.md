@@ -1,5 +1,9 @@
 # Nicole Astronomy Database v0.3.3
 
+## データ所有権・利用先仕様
+
+Nicole Astronomy Database が正本として管理するデータ項目、編集責任、各アプリでの利用箇所、非掌握領域は [DATA-OWNERSHIP.md](./DATA-OWNERSHIP.md) を正式仕様とします。
+
 ## v0.3.3 — 解説エディタPWA対応
 
 - `description-editor.html` をホーム画面 / Dock から独立起動できるPWAとして整備。
