@@ -18,8 +18,8 @@ function isStandalone(){return window.matchMedia?.('(display-mode: standalone)')
 function updateStorageNote(){
   const el=$('#storageNote'); if(!el)return;
   el.textContent=isStandalone()
-    ?'Webアプリとして起動中です。Safari本体と保存領域が分かれる場合があります。Nicole 2へ渡すときは「編集差分を書き出し」を使うと確実です。'
-    :'編集内容はSafariのローカル保存領域へ保持されます。同一オリジンをSafariで開くNicole 2は、再読込時にこの差分を参照できます。';
+    ?'Webアプリとして起動中です。Safari本体と保存領域が分かれる場合があります。端末間の移行には「編集バックアップを書き出し」を使用してください。'
+    :'編集内容はSafariのローカル保存領域へ保持されます。正式DBへ反映するには「正式DB更新パッケージを書き出す」を使用し、GitHub上の正本へ適用してください。';
 }
 updateStorageNote();
 
@@ -218,7 +218,7 @@ function saveCurrent(fromAuto=false){
   saveOverrides();
   dirty=false;
   markDirty(false);
-  $('#status').textContent=fromAuto?'自動保存しました。':'保存しました。Nicole 2を再読み込みすると反映されます。';
+  $('#status').textContent=fromAuto?'自動保存しました。':'保存しました。正式DBへの反映には更新パッケージの書き出しが必要です。';
   renderList();
   refreshLiveViews();
 }
@@ -257,6 +257,102 @@ function editedCategory(){
     return y;
   });
 }
+
+function nextPatchVersion(v){
+  const m=String(v||'0.0.0').match(/^(\d+)\.(\d+)\.(\d+)$/);
+  if(!m)return null;
+  return [Number(m[1]),Number(m[2]),Number(m[3])+1].join('.');
+}
+function changedKinds(){
+  const out=new Set();
+  for(const k of Object.keys(overrides.items||{})){
+    const kind=k.split(':')[0];
+    if(defs[kind])out.add(kind);
+  }
+  return [...out];
+}
+function editedCategoryFor(kind){
+  return (db[kind]||[]).map(x=>{
+    const y=clone(x),p=overrides.items[key(kind,x.id)];
+    if(p){merge(y,p);if(p.explanation&&y.explanation)delete y.explanation.raw_html}
+    return y;
+  });
+}
+function changedItemSummary(){
+  return Object.entries(overrides.items||{}).map(([compound,patch])=>{
+    const split=compound.indexOf(':');
+    const kind=split>=0?compound.slice(0,split):compound;
+    const id=split>=0?compound.slice(split+1):'';
+    const fields=[];
+    const walk=(o,prefix='')=>{
+      for(const [k,v] of Object.entries(o||{})){
+        const path=prefix?prefix+'.'+k:k;
+        if(v&&typeof v==='object'&&!Array.isArray(v))walk(v,path);
+        else fields.push(path);
+      }
+    };
+    walk(patch);
+    return {kind,id,fields};
+  });
+}
+async function sha256Text(text){
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function buildFormalUpdatePackage(){
+  if(dirty)saveCurrent(false);
+  const kinds=changedKinds();
+  if(!kinds.length)throw new Error('保存済みの編集がありません');
+  if(!globalThis.crypto?.subtle)throw new Error('このブラウザではSHA-256を計算できません');
+
+  const files={},checksums={};
+  for(const kind of kinds){
+    const path='data/'+defs[kind].file;
+    const data=editedCategoryFor(kind);
+    const text=JSON.stringify(data,null,2)+'\n';
+    files[path]=data;
+    checksums[path]=await sha256Text(text);
+  }
+
+  const sourceVersion=manifest?.database_version||null;
+  const targetVersion=nextPatchVersion(sourceVersion);
+  return {
+    schema:'nicole-astronomy-database-update-package-v1',
+    created_at:new Date().toISOString(),
+    authority:'Nicole Astronomy Database',
+    purpose:'Apply reviewed description edits to the authoritative GitHub database',
+    edit_scope:'shared descriptions only',
+    source_database_version:sourceVersion,
+    source_schema_version:manifest?.schema_version??null,
+    proposed_target_database_version:targetVersion,
+    changed_item_count:Object.keys(overrides.items||{}).length,
+    changed_items:changedItemSummary(),
+    files,
+    checksums_sha256:checksums,
+    publish_plan:{
+      root_targets:Object.keys(files),
+      versioned_targets:targetVersion?Object.keys(files).map(p=>`versions/${targetVersion}/${p}`):[],
+      update_manifest_checksums:true,
+      update_latest_json:true,
+      note:'This package does not modify GitHub by itself. Review and apply it to the authoritative repository.'
+    }
+  };
+}
+async function exportFormalUpdatePackage(){
+  try{
+    $('#exportReleasePackage').disabled=true;
+    $('#status').textContent='正式DB更新パッケージを作成中…';
+    const pkg=await buildFormalUpdatePackage();
+    const v=pkg.proposed_target_database_version||'next';
+    download(`Nicole-Astronomy-Database-update-${pkg.source_database_version}-to-${v}.json`,pkg);
+    $('#status').textContent=`正式DB更新パッケージを書き出しました（${pkg.changed_item_count}件）。GitHubへ反映するまでは正本は変更されません。`;
+  }catch(err){
+    alert('更新パッケージの作成に失敗しました: '+err.message);
+    $('#status').textContent='更新パッケージ作成失敗: '+err.message;
+  }finally{
+    $('#exportReleasePackage').disabled=false;
+  }
+}
 function switchPage(page){
   $$('.page').forEach(p=>p.classList.remove('active'));
   $$('.navbtn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
@@ -290,7 +386,7 @@ $('#save').onclick=()=>saveCurrent(false);
 $('#resetItem').onclick=resetCurrent;
 $('#prevItem').onclick=()=>move(-1);
 $('#nextItem').onclick=()=>move(1);
-$('#exportPatch').onclick=()=>download(`Nicole0-description-overrides-${new Date().toISOString().slice(0,10)}.json`,overrides);
+$('#exportPatch').onclick=()=>download(`Nicole-Astronomy-Database-editor-backup-${new Date().toISOString().slice(0,10)}.json`,overrides);
 $('#importPatch').onclick=()=>$('#importFile').click();
 $('#importFile').onchange=async e=>{
   const f=e.target.files?.[0];if(!f)return;
@@ -310,7 +406,8 @@ $('#resetAll').onclick=()=>{
   saveOverrides();renderList();if(currentId)selectItem(currentId);
   $('#status').textContent='全編集を初期値へ戻しました';
 };
-$('#downloadData').onclick=()=>download(defs[currentKind].file,editedCategory());
+$('#downloadData').onclick=()=>download('preview-'+defs[currentKind].file,editedCategory());
+$('#exportReleasePackage').onclick=exportFormalUpdatePackage;
 $$('.navbtn').forEach(b=>b.onclick=()=>switchPage(b.dataset.page));
 
 window.addEventListener('beforeunload',e=>{if(dirty&&!prefs.autoSave){e.preventDefault();e.returnValue=''}});
