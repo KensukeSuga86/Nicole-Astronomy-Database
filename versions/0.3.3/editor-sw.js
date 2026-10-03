@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nicole0-editor-shell-v0.3.3-r2';
+const CACHE_NAME = 'nicole0-editor-shell-v0.3.3-r3';
 const CACHE_PREFIX = 'nicole0-editor-shell-';
 const SHELL = [
   './description-editor.html',
@@ -37,7 +37,6 @@ self.addEventListener('fetch', event => {
   const url = new URL(req.url);
   if (url.origin !== self.location.origin || !isEditorShell(url)) return;
 
-  // Prefer the newest editor shell. Fall back to the installed shell offline.
   event.respondWith(
     fetch(req).then(res => {
       if (res && res.ok) {
