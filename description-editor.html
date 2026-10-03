@@ -1,6 +1,223 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nicole 0 解説エディタ</title><meta name="theme-color" content="#091522"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Nicole 0 Editor"><link rel="manifest" href="./editor.webmanifest"><link rel="apple-touch-icon" href="./assets/editor/apple-touch-icon.png"><style>
-:root{color-scheme:dark;--bg:#07111d;--panel:#0c1826;--line:#284761;--text:#dcecff;--muted:#7f9db4;--accent:#69d2ff;--ok:#70e1a2;--warn:#ffd06b}*{box-sizing:border-box}body{margin:0;background:linear-gradient(#06101b,#091522);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}header{height:52px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:#091522;position:sticky;top:0;z-index:5}header b{font-size:15px}.spacer{flex:1}button,select,input,textarea{font:inherit;color:var(--text);background:#0a1420;border:1px solid #36546d;border-radius:7px;padding:7px 9px}button{cursor:pointer}button:hover{border-color:#65b8e7}.primary{border-color:#4aa1cc;background:#10283a}.danger{border-color:#7c4050;color:#ffc4cf}.wrap{display:grid;grid-template-columns:320px minmax(0,1fr);min-height:calc(100vh - 52px)}aside{border-right:1px solid var(--line);padding:12px;overflow:auto}.main{padding:14px;overflow:auto}.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.col{display:flex;flex-direction:column;gap:5px}.muted{color:var(--muted);font-size:11px}.list{display:flex;flex-direction:column;gap:4px;margin-top:10px}.item{width:100%;text-align:left;padding:7px 8px;background:#08131f}.item.active{border-color:var(--accent);background:#102638}.meta{font-size:11px;color:var(--muted)}.title{font-size:20px;margin:0 0 4px}.editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{border:1px solid #203e56;background:#091521;border-radius:9px;padding:10px}.field label{display:block;font-weight:700;color:#bfe8ff;margin-bottom:6px}.field textarea{width:100%;min-height:140px;resize:vertical;line-height:1.55}.field.full{grid-column:1/-1}.toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}.status{padding:8px 10px;border-radius:8px;background:#0a1c20;border:1px solid #22504a;color:#aef3c7;font-size:12px}.search{width:100%;margin-top:8px}.badge{display:inline-block;border:1px solid #36546d;border-radius:999px;padding:2px 7px;font-size:10px;color:#abd8f1}@media(max-width:780px){.wrap{grid-template-columns:1fr}.editor-grid{grid-template-columns:1fr}.field.full{grid-column:auto}aside{border-right:0;border-bottom:1px solid var(--line);max-height:40vh}}</style></head><body>
-<header><b>Nicole 0 — Nicole Astronomy Database 解説エディタ</b><span class="badge" id="dbVersion">DB</span><span class="badge" id="networkStatus">ONLINE</span><div class="spacer"></div><button id="exportPatch">編集差分を書き出し</button><button id="importPatch">差分を読み込み</button><input id="importFile" type="file" accept="application/json,.json" hidden><button id="resetAll" class="danger">全編集を消去</button></header>
-<div class="wrap"><aside><div class="col"><label>種類</label><select id="kind"><option value="constellation">星座</option><option value="star">恒星</option><option value="dso">深宇宙天体</option><option value="planet">惑星</option></select><input id="search" class="search" type="search" placeholder="名称 / IDで検索"><div class="muted">編集内容はSafariのローカル保存領域へ保持されます。同一オリジンのNicole 2は再読込時にこの差分を反映します。</div></div><div class="list" id="list"></div></aside>
-<main class="main"><h1 class="title" id="itemTitle">対象を選択</h1><div class="meta" id="itemMeta"></div><div class="toolbar"><button id="save" class="primary">この解説を保存</button><button id="resetItem">この天体だけ初期値へ戻す</button><button id="downloadData">この種類の編集済みJSONを書き出す</button></div><div class="status" id="status">データを読み込み中…</div><div id="fields" class="editor-grid" style="margin-top:12px"></div></main></div>
-<script type="module" src="./description-editor.js"></script><script>if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./editor-sw.js').then(r=>r.update()).catch(e=>console.warn('Nicole 0 Editor SW registration failed',e)))}</script></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Nicole 0 解説エディタ</title>
+<meta name="theme-color" content="#091522">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Nicole 0 Editor">
+<link rel="manifest" href="./editor.webmanifest">
+<link rel="apple-touch-icon" href="./assets/editor/apple-touch-icon.png">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#07111d;--panel:#0c1826;--panel2:#091521;--line:#284761;--text:#dcecff;--muted:#7f9db4;
+  --accent:#69d2ff;--ok:#70e1a2;--warn:#ffd06b;--danger:#ff8ea2;--shadow:0 16px 45px rgba(0,0,0,.22)
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:linear-gradient(#06101b,#091522);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif}
+body{min-height:100vh}
+button,select,input,textarea{font:inherit;color:var(--text);background:#0a1420;border:1px solid #36546d;border-radius:8px;padding:8px 10px}
+button{cursor:pointer}button:hover{border-color:#65b8e7}.primary{border-color:#4aa1cc;background:#10283a}.danger{border-color:#7c4050;color:#ffc4cf}.ghost{background:transparent}
+header{min-height:54px;display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:rgba(9,21,34,.94);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20}
+header b{font-size:15px}.spacer{flex:1}.header-actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.navbtn.active{border-color:var(--accent);background:#102638}
+.badge{display:inline-block;border:1px solid #36546d;border-radius:999px;padding:3px 8px;font-size:10px;color:#abd8f1}
+.badge.ok{border-color:#2f7653;color:#b7f3ce}.badge.warn{border-color:#7b6330;color:#ffe39b}
+.page{display:none}.page.active{display:block}
+.wrap{display:grid;grid-template-columns:330px minmax(0,1fr);min-height:calc(100vh - 54px)}
+aside{border-right:1px solid var(--line);padding:12px;overflow:auto;min-width:0}.main{padding:16px;overflow:auto;min-width:0}
+.row{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.col{display:flex;flex-direction:column;gap:6px}.muted{color:var(--muted);font-size:11px;line-height:1.55}
+.search{width:100%}.filters{display:grid;grid-template-columns:1fr 1fr;gap:7px}.stats{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.list{display:flex;flex-direction:column;gap:5px;margin-top:10px}.item{width:100%;text-align:left;padding:8px 9px;background:#08131f}.item.active{border-color:var(--accent);background:#102638}.item.dirty{box-shadow:inset 3px 0 0 var(--warn)}.meta{font-size:11px;color:var(--muted)}
+.title{font-size:22px;margin:0 0 4px}.editor-head{display:flex;gap:10px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.editor-title-wrap{min-width:0}
+.toolbar{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 14px}.toolbar .push{margin-left:auto}
+.status{padding:9px 11px;border-radius:9px;background:#0a1c20;border:1px solid #22504a;color:#aef3c7;font-size:12px}.status.warn{background:#201b0c;border-color:#6d5b28;color:#ffe39b}
+.editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.field{border:1px solid #203e56;background:var(--panel2);border-radius:10px;padding:10px;min-width:0}.field label{display:flex;justify-content:space-between;gap:8px;font-weight:700;color:#bfe8ff;margin-bottom:6px}.field textarea{width:100%;min-height:150px;resize:vertical;line-height:1.6}.field.full{grid-column:1/-1}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}.compare-card,.preview-card,.help-card{border:1px solid #203e56;background:#091521;border-radius:11px;padding:14px;box-shadow:var(--shadow);min-width:0}.compare-card h3,.preview-card h3,.help-card h2,.help-card h3{margin-top:0}.compare-field{padding:10px 0;border-top:1px solid #173248}.compare-field:first-of-type{border-top:0}.compare-field b{display:block;color:#bfe8ff;margin-bottom:4px}.compare-field p{white-space:pre-wrap;line-height:1.65;margin:0;color:#c7dced;overflow-wrap:anywhere}.compare-field .empty{color:#647f93}
+.preview-card{margin-top:14px}.preview-block{padding:12px;border:1px solid #1d3e56;border-radius:9px;background:#08131f;margin-top:8px}.preview-block h4{margin:0 0 6px;color:#bfe8ff}.preview-block p{white-space:pre-wrap;line-height:1.7;margin:0;overflow-wrap:anywhere}
+.options{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.toggle{display:flex;gap:6px;align-items:center;font-size:12px;color:#bdd7e9}.toggle input{accent-color:var(--accent)}
+#helpPage{padding:20px clamp(14px,4vw,56px) 60px;max-width:1100px;margin:auto}.help-hero{margin-bottom:16px}.help-hero h1{margin-bottom:6px}.help-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.help-card.full{grid-column:1/-1}.help-card ol,.help-card ul{line-height:1.8;padding-left:1.25rem}.help-card code{background:#06101b;border:1px solid #1c374c;border-radius:5px;padding:2px 5px;color:#aee7ff}.help-note{border-left:3px solid var(--accent);padding:9px 11px;background:#0b1a28;border-radius:7px;line-height:1.7}.help-warn{border-left-color:var(--warn)}kbd{background:#06101b;border:1px solid #36546d;border-bottom-width:2px;border-radius:5px;padding:1px 5px}
+@media(max-width:900px){.wrap{grid-template-columns:1fr}.editor-grid,.compare-grid,.help-grid{grid-template-columns:1fr}.field.full,.help-card.full{grid-column:auto}aside{border-right:0;border-bottom:1px solid var(--line);max-height:38vh}}
+@media(max-width:640px){header{align-items:flex-start;flex-wrap:wrap}.spacer{display:none}.header-actions{width:100%}.header-actions button{flex:1 1 auto}.main{padding:12px}.filters{grid-template-columns:1fr}.toolbar .push{margin-left:0}.toolbar button{flex:1 1 150px}.options{align-items:flex-start;flex-direction:column}.field textarea{min-height:135px}#helpPage{padding:14px 12px 44px}}
+</style>
+</head>
+<body>
+<header>
+  <b>Nicole 0 — Astronomy Database Editor</b>
+  <span class="badge" id="dbVersion">DB</span>
+  <span class="badge" id="networkStatus">ONLINE</span>
+  <span class="badge" id="editedBadge">編集 0</span>
+  <div class="spacer"></div>
+  <div class="header-actions">
+    <button class="navbtn active" data-page="editor">編集</button>
+    <button class="navbtn" data-page="help">使い方</button>
+    <button id="exportPatch">編集差分を書き出し</button>
+    <button id="importPatch">差分を読み込み</button>
+    <input id="importFile" type="file" accept="application/json,.json" hidden>
+    <button id="resetAll" class="danger">全編集を消去</button>
+  </div>
+</header>
+
+<section id="editorPage" class="page active">
+  <div class="wrap">
+    <aside>
+      <div class="col">
+        <label>種類</label>
+        <select id="kind">
+          <option value="constellation">星座</option>
+          <option value="star">恒星</option>
+          <option value="dso">深宇宙天体</option>
+          <option value="planet">惑星</option>
+        </select>
+        <input id="search" class="search" type="search" placeholder="名称 / IDで検索">
+        <div class="filters">
+          <select id="editFilter" aria-label="編集状態で絞り込み">
+            <option value="all">すべて</option>
+            <option value="edited">編集済みのみ</option>
+            <option value="unedited">未編集のみ</option>
+          </select>
+          <select id="sortMode" aria-label="並び順">
+            <option value="source">DB順</option>
+            <option value="name">名称順</option>
+            <option value="editedFirst">編集済みを先頭</option>
+          </select>
+        </div>
+        <div class="stats"><span class="badge" id="kindCount">0件</span><span class="badge" id="kindEditedCount">編集 0件</span></div>
+        <div class="muted" id="storageNote">編集内容はこのブラウザのローカル保存領域へ保持されます。</div>
+      </div>
+      <div class="list" id="list"></div>
+    </aside>
+
+    <main class="main">
+      <div class="editor-head">
+        <div class="editor-title-wrap">
+          <h1 class="title" id="itemTitle">対象を選択</h1>
+          <div class="meta" id="itemMeta"></div>
+        </div>
+        <div class="options">
+          <label class="toggle"><input id="autoSave" type="checkbox"> 自動保存</label>
+          <span class="badge" id="dirtyBadge">保存済み</span>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <button id="prevItem">← 前へ</button>
+        <button id="nextItem">次へ →</button>
+        <button id="save" class="primary">この解説を保存</button>
+        <button id="resetItem">この天体だけ初期値へ戻す</button>
+        <button id="downloadData" class="push">この種類の編集済みJSONを書き出す</button>
+      </div>
+
+      <div class="status" id="status">データを読み込み中…</div>
+      <div id="fields" class="editor-grid"></div>
+
+      <section class="compare-grid" aria-label="原文比較">
+        <article class="compare-card"><h3>DB原文</h3><div id="originalView"></div></article>
+        <article class="compare-card"><h3>現在の編集内容</h3><div id="currentView"></div></article>
+      </section>
+
+      <section class="preview-card">
+        <h3>プレビュー</h3>
+        <div class="muted">Nicole 2の完全な画面再現ではなく、Nicole 0に保存される解説文の読みやすさを確認するためのプレビューです。</div>
+        <div id="preview"></div>
+      </section>
+    </main>
+  </div>
+</section>
+
+<section id="helpPage" class="page">
+  <div class="help-hero">
+    <h1>Nicole 0 Editor — 使い方</h1>
+    <p class="muted">Nicole Astronomy Database の共通解説を、安全に編集・バックアップ・Nicole 2へ反映するための操作ガイドです。</p>
+  </div>
+  <div class="help-grid">
+    <article class="help-card">
+      <h2>1. 基本の編集手順</h2>
+      <ol>
+        <li>左側で「星座 / 恒星 / 深宇宙天体 / 惑星」を選びます。</li>
+        <li>名称またはIDで検索し、編集したい天体を選択します。</li>
+        <li>解説欄を書き換えます。</li>
+        <li>「この解説を保存」を押します。自動保存をONにしている場合は入力後に自動保存されます。</li>
+        <li>「DB原文」と「現在の編集内容」で差を確認します。</li>
+      </ol>
+    </article>
+
+    <article class="help-card">
+      <h2>2. 編集済みの確認</h2>
+      <ul>
+        <li>左側の「編集済みのみ」で、変更済みの天体だけを表示できます。</li>
+        <li>ヘッダーと左側に編集件数が表示されます。</li>
+        <li>「保存済み / 未保存」表示で、現在の入力がまだ保存されていないか確認できます。</li>
+        <li>「← 前へ」「次へ →」で同じ種類の天体を順番に確認できます。</li>
+      </ul>
+    </article>
+
+    <article class="help-card">
+      <h2>3. 保存場所</h2>
+      <p>通常のSafariで開いた場合、編集差分はブラウザの <code>localStorage</code> に保存されます。</p>
+      <div class="help-note">Nicole 0の元JSONそのものを書き換えるのではなく、差分だけを別保存します。そのため「この天体だけ初期値へ戻す」や「全編集を消去」で元のDB内容へ戻せます。</div>
+    </article>
+
+    <article class="help-card">
+      <h2>4. iPhone / iPadでWebアプリとして使う場合</h2>
+      <p>ホーム画面へ追加したWebアプリは、Safari本体とは別の保存領域として扱われる場合があります。</p>
+      <div class="help-note help-warn">Nicole 2へ確実に渡したい場合は「編集差分を書き出し」でJSONを保存し、必要な環境で「差分を読み込み」を使ってください。</div>
+    </article>
+
+    <article class="help-card">
+      <h2>5. バックアップ</h2>
+      <ul>
+        <li><b>編集差分を書き出し</b>：変更した天体だけをまとめた小さなJSON。</li>
+        <li><b>この種類の編集済みJSONを書き出す</b>：選択中の種類について、差分を反映した完成JSON。</li>
+      </ul>
+      <p>長時間編集する前後には「編集差分を書き出し」でバックアップしておくのがおすすめです。</p>
+    </article>
+
+    <article class="help-card">
+      <h2>6. 差分JSONを読み込む</h2>
+      <p>「差分を読み込み」から、以前書き出したNicole 0 Editorの差分JSONを選択します。読み込むと現在のローカル編集内容が、その差分JSONの内容へ置き換わります。</p>
+    </article>
+
+    <article class="help-card">
+      <h2>7. 初期値へ戻す</h2>
+      <ul>
+        <li><b>この天体だけ初期値へ戻す</b>：選択中の天体だけ編集を破棄。</li>
+        <li><b>全編集を消去</b>：Nicole 0 Editorに保存したすべての差分を消去。</li>
+      </ul>
+      <div class="help-note help-warn">「全編集を消去」は元に戻せません。必要なら先に差分JSONを書き出してください。</div>
+    </article>
+
+    <article class="help-card">
+      <h2>8. オフライン利用</h2>
+      <p>Editor本体はPWAとしてキャッシュされます。ただしNicole 0のDB JSONは常に最新版を参照する設計なので、最初の読み込みやDB更新確認にはオンライン接続が必要です。</p>
+    </article>
+
+    <article class="help-card full">
+      <h2>9. Nicole 2との関係</h2>
+      <p>Nicole 0は共通データベースです。このEditorで保存するのは「Nicole 0の解説差分」で、Nicole 2側が同じ差分を参照できる構成であれば、Nicole 2を再読み込みした際に反映できます。</p>
+      <p>Webアプリとして独立起動している場合など、保存領域が別れている環境では自動共有されないため、差分JSONの書き出し・読み込みを使って受け渡します。</p>
+    </article>
+
+    <article class="help-card full">
+      <h2>10. 困ったとき</h2>
+      <ul>
+        <li>一覧が出ない → ネットワーク状態とDB読み込みエラー表示を確認。</li>
+        <li>編集したのに反映されない → 「保存済み」になっているか確認し、Nicole 2側を再読み込み。</li>
+        <li>iPhoneのWebアプリとSafariで内容が違う → 保存領域が別れている可能性があるため、差分JSONで移行。</li>
+        <li>編集内容を保険として残したい → 「編集差分を書き出し」で定期的にバックアップ。</li>
+      </ul>
+    </article>
+  </div>
+</section>
+
+<script type="module" src="./description-editor.js"></script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>navigator.serviceWorker.register('./editor-sw.js').then(r=>r.update()).catch(e=>console.warn('Nicole 0 Editor SW registration failed',e)))
+}
+</script>
+</body>
+</html>
