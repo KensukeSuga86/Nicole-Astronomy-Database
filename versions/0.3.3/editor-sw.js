@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nicole0-editor-shell-v0.3.3-r3';
+const CACHE_NAME = 'nicole0-editor-shell-v0.3.3-r4';
 const CACHE_PREFIX = 'nicole0-editor-shell-';
 const SHELL = [
   './description-editor.html',
