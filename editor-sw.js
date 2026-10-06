@@ -1,9 +1,10 @@
-const CACHE_NAME = 'nicole0-editor-shell-v0.3.3-r6';
+const CACHE_NAME = 'nicole0-editor-shell-v0.3.3-r7';
 const CACHE_PREFIX = 'nicole0-editor-shell-';
 const SHELL = [
   './description-editor.html',
   './description-editor.js',
   './editor.webmanifest',
+  './assets/editor/icon-192.png',
   './assets/editor/icon-512.png',
   './assets/editor/apple-touch-icon.png'
 ];

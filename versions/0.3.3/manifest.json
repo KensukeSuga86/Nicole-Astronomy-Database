@@ -88,13 +88,13 @@
     "schema/constellation.schema.json": "6bad0249449a25670d4460f4e69fc7ae8748e69a0fb988cace2f81dfd3746052",
     "schema/object.schema.json": "8deed814b54e6410d97b66f6e23631d7a4aa175b0075b153e6cef82d3972e83e",
     "provenance/constellation-project-hotfix-v0.3.1.json": "f8a451a6a15d6e954f1171dbfeee840f40de06c134e5cbb4c1a37617dd2465b9",
-    "description-editor.html": "de218ae4bc776729a27310216557d3911cd8ea0bc25e80b0b5cdc50980fad1d6",
+    "description-editor.html": "c8f2dbe758c99fb0e24961369ba8ee0d5919f4a14178f97c328ef05ec6c7608e",
     "description-editor.js": "62e707932e28f8d0a4d5e55710ad1c108b151e352524d636d78c37cb0744a027",
-    "editor.webmanifest": "0e1175dc04e0926471f0a66e05b25e74c2f35e04312d4e983154dadcd09f320e",
-    "editor-sw.js": "ec8f6910419f04b3bf997b8c76ded996546802ce5d0bb81d4199a1f4f5d2a40d",
-    "assets/editor/icon-192.png": "6e8a8dcc56e18c5a7c1b81d067c19afae0ac6449d4d4043bc3a302149918ca11",
-    "assets/editor/icon-512.png": "e488f0ebf01ec49422f4d14bc5f5ab27fe1747b11a45138f7e7554b24e0b512f",
-    "assets/editor/apple-touch-icon.png": "2e550922a0705430131750711951be33025ee92f8060e4b6798b2fed230eeccf"
+    "editor.webmanifest": "415157d98ffaa99f6862bac9dd79aa52c4eec5fc950081769cf58ffa5caf83fd",
+    "editor-sw.js": "474888273a6e156b3fa422857f22eb2ac741d0d31c7a81226dbd0cd7e0dc9303",
+    "assets/editor/icon-192.png": "dc0ca6862620c98b2e9b39d10e5e910dedc01e9f3049302abfbcf6fdba5478d5",
+    "assets/editor/icon-512.png": "6e23d7d976c6bcff0adf00d5c370e27ca4536adaf53f3e771406e33deb548cf3",
+    "assets/editor/apple-touch-icon.png": "860daac1b706a1bf52f1920372ecde226259ae4bfe1aeaf3325e7fba735160e5"
   },
   "constellation_art_manifest": "data/constellation-art-manifest.json"
 }
