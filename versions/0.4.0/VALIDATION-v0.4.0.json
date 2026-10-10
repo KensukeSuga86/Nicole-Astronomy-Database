@@ -1,0 +1,49 @@
+{
+  "database_version": "0.4.0",
+  "validated_at": "2026-10-10",
+  "checks": {
+    "deep-sky.json": {
+      "entries": 119,
+      "ids_unchanged_from_0.3.3": true
+    },
+    "stars.json": {
+      "entries": 64,
+      "ids_unchanged_from_0.3.3": true
+    },
+    "planets.json": {
+      "entries": 7,
+      "ids_unchanged_from_0.3.3": true
+    },
+    "constellations.json": {
+      "entries": 88,
+      "ids_unchanged_from_0.3.3": true
+    },
+    "catalog.json": {
+      "entries": 287,
+      "ids_unchanged_from_0.3.3": true
+    },
+    "constellation-standard.json": {
+      "entries": 88,
+      "ids_unchanged_from_0.3.3": true
+    },
+    "constellation-line-stars.json": {
+      "entries": 761,
+      "ids_unchanged_from_0.3.3": null
+    }
+  },
+  "enriched_entries": {
+    "deep_sky": 119,
+    "stars": 64,
+    "planets": 7,
+    "constellations": 88
+  },
+  "constellation_lines": {
+    "segments": 722,
+    "line_star_ids": 761,
+    "unresolved_line_stars": [],
+    "embedded": 273,
+    "upstream_references": 488
+  },
+  "astronomical_data_changed": "constellation lines: Ser/Oph shared-star figures (Sky & Telescope); art placement Ser/Oph; 4 embedded line stars",
+  "status": "pass"
+}

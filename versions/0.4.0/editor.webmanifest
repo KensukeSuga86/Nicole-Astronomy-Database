@@ -1,0 +1,26 @@
+{
+  "name": "Nicole Astronomy Database Editor",
+  "short_name": "Astronomy DB Editor",
+  "description": "Nicole Astronomy Database の共通解説を編集し、正式DB更新パッケージを書き出すためのPWA",
+  "id": "./description-editor.html",
+  "start_url": "./description-editor.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07111d",
+  "theme_color": "#091522",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "./assets/editor/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/editor/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
